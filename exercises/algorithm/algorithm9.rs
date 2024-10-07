@@ -44,8 +44,6 @@ where
             self.items.swap(idx, pidx);
             idx = self.parent_idx(idx);
         }
-
-        println!("{:?}", self.items);
     }
 
     fn parent_idx(&self, idx: usize) -> usize {
