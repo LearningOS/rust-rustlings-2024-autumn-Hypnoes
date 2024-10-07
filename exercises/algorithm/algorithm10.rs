@@ -1,8 +1,7 @@
 /*
-	graph
-	This problem requires you to implement a basic graph functio
+    graph
+    This problem requires you to implement a basic graph functio
 */
-// I AM NOT DONE
 
 use std::collections::{HashMap, HashSet};
 use std::fmt;
@@ -13,9 +12,11 @@ impl fmt::Display for NodeNotInGraph {
         write!(f, "accessing a node that is not in the graph")
     }
 }
+
 pub struct UndirectedGraph {
     adjacency_table: HashMap<String, Vec<(String, i32)>>,
 }
+
 impl Graph for UndirectedGraph {
     fn new() -> UndirectedGraph {
         UndirectedGraph {
@@ -28,21 +29,59 @@ impl Graph for UndirectedGraph {
     fn adjacency_table(&self) -> &HashMap<String, Vec<(String, i32)>> {
         &self.adjacency_table
     }
+
+    fn add_node(&mut self, node: &str) -> bool {
+        if self.adjacency_table.contains_key(node) {
+            return false;
+        } else {
+            self.adjacency_table.insert(node.to_string(), vec![]);
+            return true;
+        }
+    }
+
     fn add_edge(&mut self, edge: (&str, &str, i32)) {
-        //TODO
+        if let Some(node) = self.adjacency_table.get_mut(edge.0) {
+            let new_neighbor = &mut (edge.1.to_string(), edge.2);
+            let neighbor_count = node.len();
+
+            for i in 0..neighbor_count {
+                let index = i;
+                let neighbor = node.get(index).unwrap();
+                if neighbor.0 == edge.1 {
+                    node.remove(index);
+                }
+                node.push(new_neighbor.clone());
+            }
+        } else {
+            self.adjacency_table
+                .insert(edge.0.to_string(), vec![(edge.1.to_string(), edge.2)]);
+        }
+
+        if let Some(node) = self.adjacency_table.get_mut(edge.1) {
+            let new_neighbor = &mut (edge.0.to_string(), edge.2);
+            let neighbor_count = node.len();
+
+            for i in 0..neighbor_count {
+                let index = i;
+                let neighbor = node.get(index).unwrap();
+                if neighbor.0 == edge.1 {
+                    node.remove(index);
+                }
+                node.push(new_neighbor.clone());
+            }
+        } else {
+            self.adjacency_table
+                .insert(edge.1.to_string(), vec![(edge.0.to_string(), edge.2)]);
+        }
     }
 }
+
 pub trait Graph {
     fn new() -> Self;
     fn adjacency_table_mutable(&mut self) -> &mut HashMap<String, Vec<(String, i32)>>;
     fn adjacency_table(&self) -> &HashMap<String, Vec<(String, i32)>>;
-    fn add_node(&mut self, node: &str) -> bool {
-        //TODO
-		true
-    }
-    fn add_edge(&mut self, edge: (&str, &str, i32)) {
-        //TODO
-    }
+    fn add_node(&mut self, node: &str) -> bool;
+    fn add_edge(&mut self, edge: (&str, &str, i32));
     fn contains(&self, node: &str) -> bool {
         self.adjacency_table().get(node).is_some()
     }
