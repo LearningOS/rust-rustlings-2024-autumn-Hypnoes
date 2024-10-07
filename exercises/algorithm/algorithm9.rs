@@ -4,11 +4,10 @@
 */
 
 use std::cmp::Ord;
-use std::default::Default;
 
 pub struct Heap<T>
 where
-    T: Default + std::fmt::Debug,
+    T: Default,
 {
     count: usize,
     items: Vec<T>,
@@ -17,7 +16,7 @@ where
 
 impl<T> Heap<T>
 where
-    T: Default + std::fmt::Debug,
+    T: Default,
 {
     pub fn new(comparator: fn(&T, &T) -> bool) -> Self {
         Self {
@@ -81,7 +80,7 @@ where
 
 impl<T> Heap<T>
 where
-    T: Default + Ord + std::fmt::Debug,
+    T: Default + Ord,
 {
     /// Create a new MinHeap
     pub fn new_min() -> Self {
@@ -96,7 +95,7 @@ where
 
 impl<T> Iterator for Heap<T>
 where
-    T: Default + std::fmt::Debug,
+    T: Default,
 {
     type Item = T;
 
@@ -128,7 +127,7 @@ impl MinHeap {
     #[allow(clippy::new_ret_no_self)]
     pub fn new<T>() -> Heap<T>
     where
-        T: Default + Ord + std::fmt::Debug,
+        T: Default + Ord,
     {
         Heap::new(|a, b| a < b)
     }
@@ -140,7 +139,7 @@ impl MaxHeap {
     #[allow(clippy::new_ret_no_self)]
     pub fn new<T>() -> Heap<T>
     where
-        T: Default + Ord + std::fmt::Debug,
+        T: Default + Ord,
     {
         Heap::new(|a, b| a > b)
     }
